@@ -1,9 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "qK1gRoprvtArg0ZpMb7u+Ty7mfTqH44B/BDer7C+o59zBSJ0AdzA/kaL+X3nKGkojH0r10769DHDE7mDUY5S4w==",
+  "dgSpecHash": "UgqG3kwbSBcl3G5p0enltqEPXErhDCDiN0wSIhxooiLJ9W9uJHhYGIk+48k2+snKW36EwkRn7g8eJYBlYUGJVQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\Dell\\Documents\\Programowanie\\C#\\projekty .NET\\ASP .NET\\jakubek\\jakubek\\jakubek.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Dell\\.nuget\\packages\\fluentvalidation\\10.2.3\\fluentvalidation.10.2.3.nupkg.sha512",
+    "C:\\Users\\Dell\\.nuget\\packages\\fluentvalidation.aspnetcore\\10.2.3\\fluentvalidation.aspnetcore.10.2.3.nupkg.sha512",
+    "C:\\Users\\Dell\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\10.2.3\\fluentvalidation.dependencyinjectionextensions.10.2.3.nupkg.sha512",
     "C:\\Users\\Dell\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\Dell\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\5.0.7\\microsoft.aspnetcore.authentication.jwtbearer.5.0.7.nupkg.sha512",
     "C:\\Users\\Dell\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
