@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentValidation;
 using jakubek.Entities;
+using jakubek.Exceptions;
 using jakubek.Models;
 
 namespace jakubek.Validators
@@ -20,6 +21,7 @@ namespace jakubek.Validators
                 {
                     bool loginInUse = baseContext.Users.Any(u => u.Login == value);
                     if (loginInUse)
+                        //throw new BadRequestException("Ten login jest już używany");
                         context.AddFailure("Login", "Ten login jest już używany");
                 });
 

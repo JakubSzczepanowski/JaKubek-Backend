@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "UgqG3kwbSBcl3G5p0enltqEPXErhDCDiN0wSIhxooiLJ9W9uJHhYGIk+48k2+snKW36EwkRn7g8eJYBlYUGJVQ==",
+  "dgSpecHash": "DclD6Po8t1VB+tuoI56Q+63u2aBwJVsl3pIob4FDOH8gxmdBNA2rnZasWuH8msB2RNKdTbJn9IS/jlZzpWWRfw==",
   "success": true,
   "projectFilePath": "C:\\Users\\Dell\\Documents\\Programowanie\\C#\\projekty .NET\\ASP .NET\\jakubek\\jakubek\\jakubek.csproj",
   "expectedPackageFiles": [
@@ -40,6 +40,9 @@
     "C:\\Users\\Dell\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
     "C:\\Users\\Dell\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",
     "C:\\Users\\Dell\\.nuget\\packages\\microsoft.win32.systemevents\\4.7.0\\microsoft.win32.systemevents.4.7.0.nupkg.sha512",
+    "C:\\Users\\Dell\\.nuget\\packages\\nlog\\4.7.9\\nlog.4.7.9.nupkg.sha512",
+    "C:\\Users\\Dell\\.nuget\\packages\\nlog.extensions.logging\\1.7.2\\nlog.extensions.logging.1.7.2.nupkg.sha512",
+    "C:\\Users\\Dell\\.nuget\\packages\\nlog.web.aspnetcore\\4.12.0\\nlog.web.aspnetcore.4.12.0.nupkg.sha512",
     "C:\\Users\\Dell\\.nuget\\packages\\runtime.native.system\\4.3.0\\runtime.native.system.4.3.0.nupkg.sha512",
     "C:\\Users\\Dell\\.nuget\\packages\\swashbuckle.aspnetcore\\5.6.3\\swashbuckle.aspnetcore.5.6.3.nupkg.sha512",
     "C:\\Users\\Dell\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\5.6.3\\swashbuckle.aspnetcore.swagger.5.6.3.nupkg.sha512",

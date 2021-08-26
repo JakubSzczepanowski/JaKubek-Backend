@@ -22,7 +22,14 @@ namespace jakubek.Controllers
         public ActionResult RegisterUser([FromBody] RegisterUserViewModel registerUserViewModel)
         {
             _accountService.RegisterUser(registerUserViewModel);
-            return Ok();
+            return Ok("Udało się utworzyć konto");
+        }
+
+        [HttpPost("login")]
+        public ActionResult LoginUser([FromBody] LoginUserViewModel loginUserViewModel)
+        {
+            string token = _accountService.GenerateJwt(loginUserViewModel);
+            return Ok(token);
         }
     }
 }

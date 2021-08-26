@@ -10,5 +10,6 @@ namespace jakubek.Services.Interfaces
     public interface IAccountService
     {
         void RegisterUser(RegisterUserViewModel registerUserViewModel);
+        string GenerateJwt(LoginUserViewModel loginViewModel);
     }
 }
