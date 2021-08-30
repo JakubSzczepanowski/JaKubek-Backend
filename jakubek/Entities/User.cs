@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace jakubek.Entities
 {
-    public class User
+    public class User : IEntity<int>
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string Login { get; set; }
         public string PasswordHash { get; set; }
-        public int RoleId { get; set; }
+        public byte RoleId { get; set; }
         public virtual Role Role { get; set; }
     }
 }

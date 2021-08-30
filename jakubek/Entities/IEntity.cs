@@ -8,12 +8,10 @@ using System.Threading.Tasks;
 
 namespace jakubek.Entities
 {
-    public class Role : IEntity<byte>
+    public interface IEntity<KeyType>
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public byte Id { get; set; }
-        [Required]
-        public string Name { get; set; }
+        public KeyType Id { get; set; }
     }
 }

@@ -8,6 +8,8 @@ using FluentValidation.AspNetCore;
 using jakubek.Entities;
 using jakubek.Middlewares;
 using jakubek.Models;
+using jakubek.Repositories;
+using jakubek.Repositories.Interfaces;
 using jakubek.Services;
 using jakubek.Services.Interfaces;
 using jakubek.Validators;
@@ -65,6 +67,7 @@ namespace jakubek
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "jakubek", Version = "v1" });
             });
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<AppSeeder>();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             services.AddScoped<IValidator<RegisterUserViewModel>, RegisterUserViewModelValidator>();
@@ -77,8 +80,8 @@ namespace jakubek
 
                     builder.AllowAnyMethod()
                         .AllowAnyHeader()
+                        .AllowCredentials()
                         .WithOrigins(Configuration["AllowedOrigins"])
-
                     );
             });
         }

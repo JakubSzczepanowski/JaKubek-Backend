@@ -2,6 +2,7 @@
 using jakubek.Exceptions;
 using jakubek.Models;
 using jakubek.Services.Interfaces;
+using jakubek.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -12,17 +13,18 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using jakubek.Repositories.Interfaces;
 
 namespace jakubek.Services
 {
     public class AccountService : IAccountService
     {
-        private readonly BaseContext _context;
         private readonly IPasswordHasher<User> _hasher;
         private readonly AuthenticationSettings _authenticationSettings;
-        public AccountService(BaseContext baseContext, IPasswordHasher<User> hasher, AuthenticationSettings authenticationSettings)
+        private readonly IAccountRepository _accountRepository;
+        public AccountService(IPasswordHasher<User> hasher, AuthenticationSettings authenticationSettings, IAccountRepository accountRepository)
         {
-            _context = baseContext;
+            _accountRepository = accountRepository;
             _hasher = hasher;
             _authenticationSettings = authenticationSettings;
         }
@@ -35,15 +37,13 @@ namespace jakubek.Services
             };
             var hashedPassword = _hasher.HashPassword(user, registerUserViewModel.Password);
             user.PasswordHash = hashedPassword;
-            _context.Users.Add(user);
-            _context.SaveChanges();
+            _accountRepository.Create(user);
+            _accountRepository.SaveChanges();
         }
 
         public string GenerateJwt(LoginUserViewModel loginViewModel)
         {
-            var user = _context.Users
-                .Include(u => u.Role)
-                .FirstOrDefault(u => u.Login == loginViewModel.Login);
+            var user = _accountRepository.GetUserByLogin(loginViewModel.Login, u => u.Role);
 
             if (user is null)
                 throw new BadRequestException("Niepoprawny login lub hasło");
@@ -69,6 +69,31 @@ namespace jakubek.Services
             var tokenHandler = new JwtSecurityTokenHandler();
 
             return tokenHandler.WriteToken(token);
+        }
+
+        public UserViewModel Verify(string jwt)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.UTF8.GetBytes(_authenticationSettings.JwtKey);
+            tokenHandler.ValidateToken(jwt, new TokenValidationParameters() {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = false,
+                ValidateAudience = false
+            }, out SecurityToken validatedToken);
+
+            var jwtToken = (JwtSecurityToken)validatedToken;
+            var userId = int.Parse(jwtToken.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value);
+
+            var user = _accountRepository.GetById(userId);
+
+            var userDto = new UserViewModel()
+            {
+                Login = user.Login,
+                Role = user.RoleId == 1 ? "Użytkownik" : "Administrator"
+            };
+
+            return userDto;
         }
     }
 }
