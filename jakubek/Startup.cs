@@ -68,10 +68,15 @@ namespace jakubek
             });
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<IFileService, FileService>();
+            services.AddScoped<IFileRepository, FileRepository>();
+            services.AddScoped<IUserContextService, UserContextService>();
+            services.AddHttpContextAccessor();
             services.AddScoped<AppSeeder>();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             services.AddScoped<IValidator<RegisterUserViewModel>, RegisterUserViewModelValidator>();
             services.AddScoped<ErrorHandlingMiddleware>();
+            services.AddScoped<ExtractJwtFromCookieMiddleware>();
             services.AddDbContext<BaseContext>
                 (options => options.UseSqlServer(Configuration.GetConnectionString("RestaurantDbConnection")));
             services.AddCors(options =>
@@ -98,6 +103,7 @@ namespace jakubek
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "jakubek v1"));
             }
             app.UseMiddleware<ErrorHandlingMiddleware>();
+            app.UseMiddleware<ExtractJwtFromCookieMiddleware>();
             app.UseAuthentication();
             app.UseHttpsRedirection();
 

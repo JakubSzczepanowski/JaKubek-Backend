@@ -1,6 +1,10 @@
-﻿using jakubek.Models;
+﻿using jakubek.Exceptions;
+using jakubek.Models;
+using jakubek.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,19 +18,28 @@ namespace jakubek.Controllers
     [Authorize]
     public class FileController : ControllerBase
     {
-        [HttpPost]
-        public ActionResult Upload([FromBody] FileViewModel file)
+        private readonly IFileService _fileService;
+        public FileController(IFileService fileService)
         {
-            if (file is null || file.FileContent.Length <= 0)
-                return BadRequest();
+            _fileService = fileService;
+        }
+        [HttpPost]
+        public ActionResult Upload([FromForm] IFormFile file, [FromForm] string jsonString)
+        {
+            if (file is null || file.Length <= 0)
+                throw new BadRequestException("Nie znaleziono wymaganego pliku");
 
             string rootPath = Directory.GetCurrentDirectory();
-            string fileName = file.FileContent.FileName;
+            string fileName = file.FileName;
             string fullPath = $"{rootPath}/PrivateFiles/{fileName}";
-            using(var stream = new FileStream(fullPath, FileMode.Create))
+            if (System.IO.File.Exists(fullPath))
+                return Ok(new { message = "Plik o takiej nazwie już istnieje" });
+            using (var stream = new FileStream(fullPath, FileMode.Create))
             {
-                file.FileContent.CopyTo(stream);
+                file.CopyTo(stream);
             }
+            FileViewModel fileModel = JsonConvert.DeserializeObject<FileViewModel>(jsonString);
+            _fileService.CreateFile(fileModel);
             return Ok(new { message = "Udało się poprawnie utworzyć plik"});
         }
     }

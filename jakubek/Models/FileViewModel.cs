@@ -10,10 +10,9 @@ namespace jakubek.Models
 {
     public class FileViewModel
     {
-        public IFormFile FileContent { get; set; }
+        public string FileName { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public string CreatedBy { get; set; }
 
     }
 }
