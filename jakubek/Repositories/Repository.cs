@@ -18,6 +18,7 @@ namespace jakubek.Repositories
             DbContext = dbContext;
             DbSet = DbContext.Set<EntityType>();
         }
+        public virtual IQueryable<EntityType> GetAll() => DbSet.AsQueryable();
         public virtual EntityType GetById(KeyType id) => DbSet.FirstOrDefault(e => e.Id.Equals(id));
         public virtual EntityType GetById(KeyType id, Expression<Func<EntityType, object>> includeOption) => DbSet.Include(includeOption).FirstOrDefault(e => e.Id.Equals(id));
         public virtual EntityType Create(EntityType entity) => DbSet.Add(entity).Entity;

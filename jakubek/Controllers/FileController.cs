@@ -4,6 +4,7 @@ using jakubek.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,26 @@ namespace jakubek.Controllers
         {
             _fileService = fileService;
         }
+
+        [HttpGet]
+        public ActionResult GetFilesList()
+        {
+            var files = _fileService.GetExistingFiles();
+            return Ok(files);
+        }
+
+        [HttpGet("{id}")]
+        public ActionResult Download([FromRoute] int id)
+        {
+            var (filePath,fileName) = _fileService.GetFileById(id);
+            var contentProvider = new FileExtensionContentTypeProvider();
+            contentProvider.TryGetContentType(fileName, out string contentType);
+
+            byte[] fileContents = System.IO.File.ReadAllBytes(filePath);
+
+            return File(fileContents, contentType, fileName);
+        }
+
         [HttpPost]
         public ActionResult Upload([FromForm] IFormFile file, [FromForm] string jsonString)
         {

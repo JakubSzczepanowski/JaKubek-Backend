@@ -10,5 +10,7 @@ namespace jakubek.Services.Interfaces
     public interface IFileService
     {
         void CreateFile(FileViewModel file);
+        List<FileListViewModel> GetExistingFiles();
+        Tuple<string,string> GetFileById(int id);
     }
 }

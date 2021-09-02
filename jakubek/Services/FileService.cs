@@ -2,6 +2,7 @@
 using jakubek.Models;
 using jakubek.Repositories.Interfaces;
 using jakubek.Services.Interfaces;
+using Microsoft.AspNetCore.StaticFiles;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -34,6 +35,30 @@ namespace jakubek.Services
 
             _fileRepository.Create(newFile);
             _fileRepository.SaveChanges();
+        }
+
+        public List<FileListViewModel> GetExistingFiles()
+        {
+            var listFiles = _fileRepository.GetAll().Select(e => new FileListViewModel{ 
+            Id = e.Id,
+            FileName = e.FileName,
+            Name = e.Name,
+            Description = e.Description
+            }).ToList();
+
+            return listFiles;
+        }
+
+        public Tuple<string,string> GetFileById(int id)
+        {
+            string fileName = _fileRepository.GetById(id).FileName;
+            string rootPath = Directory.GetCurrentDirectory();
+            string filePath = $"{rootPath}/PrivateFiles/{fileName}";
+
+            if (!System.IO.File.Exists(filePath))
+                throw new NotFoundException("Nie znaleziono pliku");
+
+            return Tuple.Create(filePath,fileName);
         }
     }
 }

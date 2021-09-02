@@ -9,6 +9,7 @@ namespace jakubek.Repositories
 {
     public interface IRepository<KeyType,EntityType> where EntityType : class
     {
+        IQueryable<EntityType> GetAll();
         EntityType GetById(KeyType id);
         EntityType GetById(KeyType id, Expression<Func<EntityType, object>> includeOption);
         EntityType Create(EntityType entity);
