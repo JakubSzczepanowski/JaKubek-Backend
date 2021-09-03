@@ -23,6 +23,7 @@ namespace jakubek.Repositories
         public virtual EntityType GetById(KeyType id, Expression<Func<EntityType, object>> includeOption) => DbSet.Include(includeOption).FirstOrDefault(e => e.Id.Equals(id));
         public virtual EntityType Create(EntityType entity) => DbSet.Add(entity).Entity;
         public virtual void CreateList(List<EntityType> entity) => DbSet.AddRange(entity);
+        public virtual void Delete(EntityType entity) => DbSet.Remove(entity);
         public void SaveChanges() => DbContext.SaveChanges();
     }
 }

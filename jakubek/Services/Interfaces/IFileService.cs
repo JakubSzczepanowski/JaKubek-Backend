@@ -12,5 +12,7 @@ namespace jakubek.Services.Interfaces
         void CreateFile(FileViewModel file);
         List<FileListViewModel> GetExistingFiles();
         Tuple<string,string> GetFileById(int id);
+        void UpdateFile(int id, FileUpdateViewModel fileUpdateViewModel);
+        void DeleteFile(int id);
     }
 }

@@ -63,5 +63,20 @@ namespace jakubek.Controllers
             _fileService.CreateFile(fileModel);
             return Ok(new { message = "Udało się poprawnie utworzyć plik"});
         }
+
+        [HttpPut("{id}")]
+        public ActionResult Update([FromRoute] int id, [FromBody] FileUpdateViewModel fileUpdateViewModel)
+        {
+            _fileService.UpdateFile(id, fileUpdateViewModel);
+
+            return Ok(new { message = "Udało się poprawnie zaktualizować dane pliku"});
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult Delete([FromRoute] int id)
+        {
+            _fileService.DeleteFile(id);
+            return NoContent();
+        }
     }
 }

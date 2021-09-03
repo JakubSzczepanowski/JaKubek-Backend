@@ -14,6 +14,7 @@ namespace jakubek.Repositories
         EntityType GetById(KeyType id, Expression<Func<EntityType, object>> includeOption);
         EntityType Create(EntityType entity);
         void CreateList(List<EntityType> entity);
+        void Delete(EntityType entity);
         void SaveChanges();
     }
 }
