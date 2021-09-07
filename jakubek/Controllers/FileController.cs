@@ -26,9 +26,16 @@ namespace jakubek.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetFilesList()
+        public ActionResult<IEnumerable<FileListViewModel>> GetFilesList([FromQuery] BaseQuery query)
         {
-            var files = _fileService.GetExistingFiles();
+            var files = _fileService.GetExistingFiles(query);
+            return Ok(files);
+        }
+
+        [HttpGet("userFiles")]
+        public ActionResult<IEnumerable<FileListViewModel>> GetUserFilesList([FromQuery] BaseQuery query)
+        {
+            var files = _fileService.GetUserFiles(query);
             return Ok(files);
         }
 

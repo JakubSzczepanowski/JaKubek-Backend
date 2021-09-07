@@ -41,16 +41,45 @@ namespace jakubek.Services
             _fileRepository.SaveChanges();
         }
 
-        public List<FileListViewModel> GetExistingFiles()
+        public PagedResult<FileListViewModel> GetExistingFiles(BaseQuery query)
         {
-            var listFiles = _fileRepository.GetAll().Select(e => new FileListViewModel{ 
-            Id = e.Id,
-            FileName = e.FileName,
-            Name = e.Name,
-            Description = e.Description
-            }).ToList();
+            var baseQuery = _fileRepository.GetAll().Where(r => query.SearchPhrase == null || (r.Name.ToLower().Contains(query.SearchPhrase.ToLower()) || r.Description.ToLower().Contains(query.SearchPhrase.ToLower())));
 
-            return listFiles;
+            var listFiles = baseQuery
+                .Skip(query.PageSize*(query.PageNumber-1))
+                .Take(query.PageSize)
+                .Select(e => new FileListViewModel
+                {
+                    Id = e.Id,
+                    FileName = e.FileName,
+                    Name = e.Name,
+                    Description = e.Description
+                }).ToList();
+
+            var result = new PagedResult<FileListViewModel>(listFiles, baseQuery.Count(), query.PageSize, query.PageNumber);
+
+            return result;
+        }
+
+        public PagedResult<FileListViewModel> GetUserFiles(BaseQuery query)
+        {
+            int userId = _userContextService.GetUserId;
+            var baseQuery = _fileRepository.GetAll().Where(c => c.UserId == userId).Where(r => query.SearchPhrase == null || (r.Name.ToLower().Contains(query.SearchPhrase.ToLower()) || r.Description.ToLower().Contains(query.SearchPhrase.ToLower())));
+
+            var listFiles = baseQuery
+                .Skip(query.PageSize * (query.PageNumber - 1))
+                .Take(query.PageSize)
+                .Select(e => new FileListViewModel
+                {
+                    Id = e.Id,
+                    FileName = e.FileName,
+                    Name = e.Name,
+                    Description = e.Description
+                }).ToList();
+
+            var result = new PagedResult<FileListViewModel>(listFiles, baseQuery.Count(), query.PageSize, query.PageNumber);
+
+            return result;
         }
 
         public Tuple<string,string> GetFileById(int id)
@@ -100,6 +129,7 @@ namespace jakubek.Services
 
             System.IO.File.Delete(filePath);
             _fileRepository.Delete(fileRecord);
+            _fileRepository.SaveChanges();
         }
     }
 }

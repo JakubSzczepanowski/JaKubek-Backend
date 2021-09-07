@@ -10,8 +10,9 @@ namespace jakubek.Services.Interfaces
     public interface IFileService
     {
         void CreateFile(FileViewModel file);
-        List<FileListViewModel> GetExistingFiles();
+        PagedResult<FileListViewModel> GetExistingFiles(BaseQuery query);
         Tuple<string,string> GetFileById(int id);
+        PagedResult<FileListViewModel> GetUserFiles(BaseQuery query);
         void UpdateFile(int id, FileUpdateViewModel fileUpdateViewModel);
         void DeleteFile(int id);
     }

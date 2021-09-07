@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using jakubek.Authorization;
 using jakubek.Entities;
 using jakubek.Middlewares;
 using jakubek.Models;
@@ -13,6 +14,7 @@ using jakubek.Repositories.Interfaces;
 using jakubek.Services;
 using jakubek.Services.Interfaces;
 using jakubek.Validators;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -61,6 +63,7 @@ namespace jakubek
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey)),
                 };
             });
+            services.AddScoped<IAuthorizationHandler, ResourceOperationRequirementHandler>();
             services.AddControllers().AddFluentValidation();
             services.AddSwaggerGen(c =>
             {
@@ -75,6 +78,7 @@ namespace jakubek
             services.AddScoped<AppSeeder>();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             services.AddScoped<IValidator<RegisterUserViewModel>, RegisterUserViewModelValidator>();
+            services.AddScoped<IValidator<BaseQuery>, BaseQueryValidator>();
             services.AddScoped<ErrorHandlingMiddleware>();
             services.AddScoped<ExtractJwtFromCookieMiddleware>();
             services.AddDbContext<BaseContext>
