@@ -11,6 +11,7 @@ namespace jakubek.Validators
     public class BaseQueryValidator : AbstractValidator<BaseQuery>
     {
         private int[] allowedPageSizes = new[] { 5,10,15};
+        private string[] allowedSortByColumnNames = new[] { nameof(Entities.File.Name), nameof(Entities.File.Description) };
         public BaseQueryValidator()
         {
             RuleFor(r => r.PageNumber).GreaterThanOrEqualTo(1);
@@ -19,6 +20,9 @@ namespace jakubek.Validators
                 if (!allowedPageSizes.Contains(value))
                     context.AddFailure("PageSize", $"PageSize musi zawierać się w [{string.Join(",", allowedPageSizes)}]");
             });
+            RuleFor(r => r.SortBy)
+                .Must(value => string.IsNullOrEmpty(value) || allowedSortByColumnNames.Contains(value))
+                .WithMessage($"Sortowanie jest opcjonalne lub musi zawierać się w [{string.Join(",", allowedSortByColumnNames)}]");
         }
     }
 }

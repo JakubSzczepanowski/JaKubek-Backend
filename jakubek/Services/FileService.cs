@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -45,6 +46,19 @@ namespace jakubek.Services
         {
             var baseQuery = _fileRepository.GetAll().Where(r => query.SearchPhrase == null || (r.Name.ToLower().Contains(query.SearchPhrase.ToLower()) || r.Description.ToLower().Contains(query.SearchPhrase.ToLower())));
 
+            if(!string.IsNullOrEmpty(query.SortBy))
+            {
+                var columnSelectors = new Dictionary<string, Expression<Func<Entities.File, object>>>()
+                {
+                    { nameof(Entities.File.Name), r => r.Name},
+                    { nameof(Entities.File.Description), r => r.Description}
+                };
+                var selectedColumn = columnSelectors[query.SortBy];
+
+                baseQuery = query.SortDirection == SortDirection.ASC ? baseQuery.OrderBy(selectedColumn)
+                    : baseQuery.OrderByDescending(selectedColumn);
+            }
+
             var listFiles = baseQuery
                 .Skip(query.PageSize*(query.PageNumber-1))
                 .Take(query.PageSize)
@@ -53,7 +67,8 @@ namespace jakubek.Services
                     Id = e.Id,
                     FileName = e.FileName,
                     Name = e.Name,
-                    Description = e.Description
+                    Description = e.Description,
+                    UserName = e.User.Login
                 }).ToList();
 
             var result = new PagedResult<FileListViewModel>(listFiles, baseQuery.Count(), query.PageSize, query.PageNumber);
@@ -66,6 +81,19 @@ namespace jakubek.Services
             int userId = _userContextService.GetUserId;
             var baseQuery = _fileRepository.GetAll().Where(c => c.UserId == userId).Where(r => query.SearchPhrase == null || (r.Name.ToLower().Contains(query.SearchPhrase.ToLower()) || r.Description.ToLower().Contains(query.SearchPhrase.ToLower())));
 
+            if (!string.IsNullOrEmpty(query.SortBy))
+            {
+                var columnSelectors = new Dictionary<string, Expression<Func<Entities.File, object>>>()
+                {
+                    { nameof(Entities.File.Name), r => r.Name},
+                    { nameof(Entities.File.Description), r => r.Description}
+                };
+                var selectedColumn = columnSelectors[query.SortBy];
+
+                baseQuery = query.SortDirection == SortDirection.ASC ? baseQuery.OrderBy(selectedColumn)
+                    : baseQuery.OrderByDescending(selectedColumn);
+            }
+
             var listFiles = baseQuery
                 .Skip(query.PageSize * (query.PageNumber - 1))
                 .Take(query.PageSize)
@@ -74,7 +102,8 @@ namespace jakubek.Services
                     Id = e.Id,
                     FileName = e.FileName,
                     Name = e.Name,
-                    Description = e.Description
+                    Description = e.Description,
+                    UserName = e.User.Login
                 }).ToList();
 
             var result = new PagedResult<FileListViewModel>(listFiles, baseQuery.Count(), query.PageSize, query.PageNumber);
