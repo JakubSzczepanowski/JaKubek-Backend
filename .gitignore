@@ -1,5 +1,6 @@
 /jakubek/bin
 /jakubek/obj
+/jakubek/PrivateFiles
 /jakubek/appsettings.Development.json
 /jakubek/appsettings.json
-.vs/
+.vs
